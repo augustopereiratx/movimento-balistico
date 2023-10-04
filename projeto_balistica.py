@@ -1,5 +1,4 @@
-from math import sin, cos, sqrt
-import sympy as sp
+from math import sin, cos, sqrt, radians
 
 def main():
     # Declaração inicial de variáveis
@@ -14,7 +13,7 @@ def main():
     y0 = float(y0)
     y = float(y)
     v0 = float(v0)
-    alfa = float(alfa)
+    alfa = radians(float(alfa))
     td = float(td)
 
     # Decompor o vetor
@@ -23,18 +22,24 @@ def main():
     v0y = sin(alfa) * v0
     print("Velocidade inicial y:",v0y)
 
+    # Y máximo
+    if(v0y != 0):
+        ymax = (v0y**2/g)/2
+    else:
+        ymax = y0
+    print("Valor de y no ápice:",ymax)
+
     # Calcular tempo em que chega no ápice y
     tymax = v0y/g
     print("Tempo no ápice de y:",tymax)
 
 
     # Tempo no ar é igual a 2 * tempo de subida
-    tnoar = tymax * 2
+    if(tymax != 0):
+        tnoar = tymax * 2
+    else:
+        tnoar = sqrt(((2*y0)/g))
     print("Tempo no ar:",tnoar)
-
-    # Y máximo
-    ymax = y0 + v0y*tymax - g*(tymax**2)*0.5
-    print("Valor de y no ápice:",ymax)
 
     # X máximo
     xmax = v0x*tnoar
@@ -44,21 +49,39 @@ def main():
     vxapice = v0x
     print("Velocidade x na posição hmax:",vxapice," * i")
 
-    vyapice = ymax/tymax
-    print("Velocidade y na posição hmax:",vyapice," * j")
+    vyapice = 0.0
+    print("Velocidade y na posição hmax:",vyapice," * j\nNo hmax, vy é sempre igual a 0, pois é o momento em que a gravidade vence a velocidade vertical do objeto.")
 
-    moduloapice = (cos(alfa)*vxapice + sin(alfa)*vyapice)
+    moduloapice = vxapice**2 + vyapice**2
+    moduloapice = sqrt(moduloapice)
     print("Módulo |v->| na posição hmax:",moduloapice)
 
     # vx, vy e |v->| quando atinge o solo
     vxsolo = v0x
     print("Velocidade x quando atinge o solo:",vxsolo," * i")
 
-    vysolo = (y0 + v0y*tnoar - g*(tnoar**2)*0.5)/tnoar
+    vysolo = v0y-g*tnoar
     print("Velocidade y quando atinge o solo:",vysolo," * j")
 
-    modulosolo = (cos(alfa)*vxsolo + sin(alfa)*vysolo)
+    modulosolo = vxsolo**2 + vysolo**2
+    modulosolo = sqrt(modulosolo)
     print("Módulo |v->| quando atinge o solo:",modulosolo)
+
+    xtd = (v0x*td)
+    print("x(td): ",xtd,"m")
+
+    ytd = (y0 + v0y*td - (g*(td**2))/2)
+    print("y(td): ",ytd,"m")
+
+    vxtd = v0x
+    print("vx(td): ",vxtd,"m/s")
+    
+    vytd = v0y - g*td
+    print("vy(td): ",vytd,"m/s")
+
+    modulotd = sqrt(vxtd**2+vytd**2)
+    print("módulo(td): ",modulotd,"m/s")
+    
 
 # Executar
 main()
